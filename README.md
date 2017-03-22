@@ -1,34 +1,45 @@
-1. mnist/mnist_softmax.py
+<div align="center">
+  <img src="https://www.tensorflow.org/images/tf_logo_transp.png"><br><br>
+</div>
+-----------------
 
-   https://www.tensorflow.org/get_started/mnist/beginners
-   0.9134
+##1. mnist/mnist_softmax.py
+
+* [mnist websit](https://www.tensorflow.org/get_started/mnist/beginners)
+
+   Accuracy: 0.9134
    
-   Demo of the simplest tf training: 
+   Demo of the simplest tf training:
        data loading
        training
        testing
        summary
 
-2. mnist/mnist_with_summaries.py
+##2. mnist/mnist_with_summaries.py
 
-   https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py
-   0.9664
+* [mnist_summaries websit](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py)
+
+   Accuracy: 0.9664
 
    Demo of summaries with super clear structures, just see from tensorboard.
 
-     cd /tmp/tensorflow/mnist/logs/mnist_with_summaries/train
-     tensorboard --logdit=.
-   
+   ```python
+   >>> cd /tmp/tensorflow/mnist/logs/mnist_with_summaries/train
+   >>> tensorboard --logdit=.
+   ```
+ 
    with train/val loss together, image summary, distributions, histograms.
 
-3. cifar10/
+##3. cifar10/
 
-   https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10
+* [cifar10 weibsit](https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10)
+ 
    cifar10 with train-validation-loss-accuracy
 
-   RUN:
-       cd cifar10
-       CUDA_VISIBLE_DEVICES=0 python cifar10_train.py 
+   ```python
+   >>> cd cifar10
+   >>> CUDA_VISIBLE_DEVICES=0 python cifar10_train.py 
+   ```
  
    OUTPUT:
 
