@@ -3,9 +3,9 @@
 </div>
 -----------------
 
-##1. mnist/mnist_softmax.py
+1. mnist/mnist_softmax.py
 
-* [mnist websit](https://www.tensorflow.org/get_started/mnist/beginners)
+* [mnist website](https://www.tensorflow.org/get_started/mnist/beginners)
 
    Accuracy: 0.9134
    
@@ -15,9 +15,9 @@
        testing
        summary
 
-##2. mnist/mnist_with_summaries.py
+2. mnist/mnist_with_summaries.py
 
-* [mnist_summaries websit](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py)
+* [mnist_summaries website](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py)
 
    Accuracy: 0.9664
 
@@ -30,9 +30,9 @@
  
    with train/val loss together, image summary, distributions, histograms.
 
-##3. cifar10/
+3. cifar10/
 
-* [cifar10 weibsit](https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10)
+* [cifar10 weibsite](https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10)
  
    cifar10 with train-validation-loss-accuracy
 
