@@ -28,11 +28,13 @@
        CUDA_VISIBLE_DEVICES=0 python cifar10_train.py 
  
    OUTPUT:
+
         Downloading cifar-10-binary.tar.gz 100.0%
         Successfully downloaded cifar-10-binary.tar.gz 170052171 bytes.
         Filling queue with 20000 CIFAR images before starting to train. This will take a few minutes.
         I tensorflow/core/common_runtime/gpu/gpu_device.cc:885] Found device 0 with properties: 
         ...
+
         2017-03-22 14:43:15.259168: TEST 0, LOSS = 9.37, TOP1 = 0.0859, TOP5 = 0.4688 (88.8 examples/sec; 1.442 sec/batch)
 
         2017-03-22 14:43:16.699838: step 10, loss = 6.92, top1 = 0.2188 , top5 = 0.7109 (888.5 examples/sec; 0.144 sec/batch)
