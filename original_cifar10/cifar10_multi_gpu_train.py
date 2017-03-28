@@ -65,25 +65,14 @@ def tower_loss(scope):
      Tensor of shape [] containing the total loss for a batch of data
   """
   # Get images and labels for CIFAR-10.
-  images, labels = cifar10.distorted_inputs() 
-  test_images, test_labels = cifar10.inputs(True)
- 
+  images, labels = cifar10.distorted_inputs()
+
   # Build inference Graph.
-  with tf.variable_scope("Inference"):
-    logits = cifar10.inference(images)
-  with tf.variable_scope("Inference", reuse=True):
-    test_logits = cifar10.inference(test_images)
+  logits = cifar10.inference(images)
 
   # Build the portion of the Graph calculating the losses. Note that we will
   # assemble the total_loss using a custom function below.
-  train_loss, train_top1, train_top5 = cifar10.loss(logits, labels) 
-  test_loss, test_top1, test_top5 = cifar10.loss(test_logits, test_labels)
-  tf.summary.scalar('test_loss', test_loss)
-  tf.summary.scalar('test_top1', test_top1)
-  tf.summary.scalar('test_top5', test_top5)
-  tf.summary.scalar('train_loss', train_loss)
-  tf.summary.scalar('train_top1', train_top1)
-  tf.summary.scalar('train_top5', train_top5)
+  _ = cifar10.loss(logits, labels)
 
   # Assemble all of the losses for the current tower only.
   losses = tf.get_collection('losses', scope)
@@ -99,8 +88,8 @@ def tower_loss(scope):
     loss_name = re.sub('%s_[0-9]*/' % cifar10.TOWER_NAME, '', l.op.name)
     tf.summary.scalar(loss_name, l)
 
-  return total_loss, train_loss, train_top1, train_top5, \
-         test_loss, test_top1, test_top5
+  return total_loss
+
 
 def average_gradients(tower_grads):
   """Calculate the average gradient for each shared variable across all towers.
@@ -171,9 +160,8 @@ def train():
             # Calculate the loss for one tower of the CIFAR model. This function
             # constructs the entire CIFAR model but shares the variables across
             # all towers.
-            loss, train_loss, train_top1, train_top5, \
-            test_loss, test_top1, test_top5 = tower_loss(scope)
- 
+            loss = tower_loss(scope)
+
             # Reuse variables for the next tower.
             tf.get_variable_scope().reuse_variables()
 
@@ -184,7 +172,7 @@ def train():
             grads = opt.compute_gradients(loss)
 
             # Keep track of the gradients across all towers.
-            tower_grads.append(grads) 
+            tower_grads.append(grads)
 
     # We must calculate the mean of each gradient. Note that this is the
     # synchronization point across all towers.
@@ -237,9 +225,7 @@ def train():
 
     for step in xrange(FLAGS.max_steps):
       start_time = time.time()
-      _, loss_value, train_loss_value, train_top1_value, train_top5_value \
-          = sess.run([train_op, loss, train_loss, train_top1, train_top5])
- 
+      _, loss_value = sess.run([train_op, loss])
       duration = time.time() - start_time
 
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
@@ -249,25 +235,14 @@ def train():
         examples_per_sec = num_examples_per_step / duration
         sec_per_batch = duration / FLAGS.num_gpus
 
-        format_str = ('%s: step %d, loss = %.2f, '
-                      'logits = %.2f, top1 = %.4f, top5 = %.4f '
-                      '(%.1f examples/sec; %.3f sec/batch)')
-        print (format_str % (datetime.now(), step, loss_value, 
-                             train_loss_value, train_top1_value, train_top5_value, 
+        format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
+                      'sec/batch)')
+        print (format_str % (datetime.now(), step, loss_value,
                              examples_per_sec, sec_per_batch))
 
       if step % 100 == 0:
         summary_str = sess.run(summary_op)
         summary_writer.add_summary(summary_str, step)
-        
-        # Print test loss/TOP1/TOP5
-        test_loss_value, test_top1_value, test_top5_value = sess.run(
-            [test_loss, test_top1, test_top5])
-  
-        format_str = ('%s: TEST %d,                '
-                      'LOSS = %.2f, TOP1 = %.4f, TOP5 = %.4f\n')
-        print (format_str % (datetime.now(), step, 
-                             test_loss_value, test_top1_value, test_top5_value))
 
       # Save the model checkpoint periodically.
       if step % 1000 == 0 or (step + 1) == FLAGS.max_steps:

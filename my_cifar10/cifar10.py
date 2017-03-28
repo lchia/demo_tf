@@ -165,7 +165,6 @@ def inputs(eval_data):
   if FLAGS.use_fp16:
     images = tf.cast(images, tf.float16)
     labels = tf.cast(labels, tf.float16)
-
   return images, labels
 
 
@@ -270,20 +269,35 @@ def loss(logits, labels):
   cross_entropy_mean = tf.reduce_mean(cross_entropy, name='cross_entropy')
   tf.add_to_collection('losses', cross_entropy_mean)
 
-  # Accuracy
-  top_1_op = tf.nn.in_top_k(logits, labels, 1)
-  top_5_op = tf.nn.in_top_k(logits, labels, 5)
-  
-  top1_accu = tf.reduce_sum(tf.cast(top_1_op,tf.float32))
-  top1_accu_value = tf.div(top1_accu, FLAGS.batch_size)
-
-  top5_accu = tf.reduce_sum(tf.cast(top_5_op,tf.float32))
-  top5_accu_value = tf.div(top5_accu, FLAGS.batch_size)
-
   # The total loss is defined as the cross entropy loss plus all of the weight
   # decay terms (L2 loss).
-  return tf.add_n(tf.get_collection('losses'), name='total_loss'), \
-         top1_accu_value, top5_accu_value, 
+  return cross_entropy_mean, tf.add_n(tf.get_collection('losses'), name='total_loss')
+
+
+def test_loss(logits, labels):
+  """Add L2Loss to all the trainable variables.
+  Add summary for "Loss" and "Loss/avg".
+  Args:
+    logits: Logits from inference().
+    labels: Labels from distorted_inputs or inputs(). 1-D tensor
+            of shape [batch_size]
+  Returns:
+    Loss tensor of type float.
+  """
+  # Calculate the average cross entropy loss across the batch.
+  labels = tf.cast(labels, tf.int64)
+  test_batch_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
+      labels=labels, logits=logits, name='test_batch')
+  test_batch_loss_mean = tf.reduce_mean(test_batch_loss, name='test_batch_loss')
+   
+  # Calculate predictions.
+  top_1_op = tf.nn.in_top_k(logits, labels, 1)
+  top_5_op = tf.nn.in_top_k(logits, labels, 5)
+
+  top_1_accu = tf.div(tf.reduce_sum(tf.cast(top_1_op,tf.float32)), FLAGS.batch_size)
+  top_5_accu = tf.div(tf.reduce_sum(tf.cast(top_5_op,tf.float32)), FLAGS.batch_size)
+   
+  return test_batch_loss_mean, top_1_accu, top_5_accu
 
 
 def _add_loss_summaries(total_loss):
