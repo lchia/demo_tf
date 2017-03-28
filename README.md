@@ -129,3 +129,28 @@
 
         2017-03-28 19:13:30.626960: precision @ 1 = 0.612
 
+5. all_cifar10/
+ 
+   cifar10 with tf_demo_net, densenet, ...
+
+   ```python
+   >>> cd all_cifar10
+   >>>  nohup sh single_train_test.sh >single_train_test.out &1 &
+
+   ACCURACY:
+
+   OUTPUT:
+
+        2017-03-28 20:13:00.591807: step 0, TEST loss = 2.30, TOP_1 = 0.0469, TOP_5 = 0.5156 (115.3 examples/sec; 1.111 sec/batch)
+        2017-03-28 20:13:01.345607: step 10, TRAIN loss = 2.25 TOTAL loss = 4.60 (1698.1 examples/sec; 0.075 sec/batch)
+        2017-03-28 20:13:02.187171: step 20, TRAIN loss = 2.09 TOTAL loss = 4.43 (1521.0 examples/sec; 0.084 sec/batch)
+        2017-03-28 20:13:03.057922: step 30, TRAIN loss = 2.06 TOTAL loss = 4.38 (1470.0 examples/sec; 0.087 sec/batch)
+        2017-03-28 20:13:03.833350: step 40, TRAIN loss = 2.00 TOTAL loss = 4.30 (1650.7 examples/sec; 0.078 sec/batch)
+        2017-03-28 20:13:04.678725: step 50, TRAIN loss = 2.14 TOTAL loss = 4.42 (1514.1 examples/sec; 0.085 sec/batch)
+        2017-03-28 20:13:05.502178: step 60, TRAIN loss = 2.11 TOTAL loss = 4.37 (1554.4 examples/sec; 0.082 sec/batch)
+        ...
+        2017-03-28 20:13:16.559034: step 200, TEST loss = 1.60, TOP_1 = 0.3906, TOP_5 = 0.8906 (1341.6 examples/sec; 0.095 sec/batch)
+        ...
+        ...
+        2017-03-28 20:14:24.109409: precision @ 1 = 0.610
+
